@@ -1,10 +1,65 @@
 var express = require('express'),
     apiRouter = express.Router(),
+    jwt = require('jsonwebtoken'),
+    jwtSecret = 'thisIsASecretForOurTokens',
     User = require('./../models/user');
 
+
+// route for authenticating
+apiRouter.post('/authenticate', function(req, res) {
+    User.findOne({
+        username: req.body.username
+    }).select('name username password').exec(function(err, user){
+        if (err) throw err;
+        // username not found
+        if (!user) {
+            res.json({ success: false, message: 'Authentication failed. User not found.'});
+        }
+        else if (user) {
+            // check password
+            var validPassword = user.comparePassword(req.body.password);
+            if (!validPassword) {
+                res.json({ success: false, message: 'Authentication failed. Wrong password.'});
+            } else {
+                // username found and password correct, create jwt token
+                var token = jwt.sign({
+                    name: user.name,
+                    username: user.username
+                }, jwtSecret, {
+                    expiresInMinutes: 1440 // token expires in 24 hrs
+                });
+
+                res.json({
+                    success: true,
+                    message: 'Token delivered Successfully',
+                    token: token
+                });
+            }
+        }
+    })
+});
+
+// middleware used by all requests
 apiRouter.use(function (req, res, next) {
-    console.log('connected to chatbouttv api');
-    next();
+
+    // check for token from header, url or post params
+    var token = req.body.token || req.param('token') || req.headers['x-access-token'];
+
+    if (token) {
+        // verify secret and check expiration
+        jwt.verify(token, jwtSecret, function(err, decoded){
+            if (err){
+                return res.status(403).send({ success: false, message: 'Failed to authenticate token.'});
+            } else {
+                // save request for use in other routes
+                req.decoded = decoded;
+                console.log('connected to chatbouttv api');
+                next();
+            }
+        });
+    } else {
+        return res.status(403).send({ success: false, message: 'No token provided.'});
+    }
 });
 
 apiRouter.get('/', function(req, res){
@@ -54,6 +109,7 @@ apiRouter.route('/users')
 
 apiRouter.route('/users/:user_id')
 
+    // get user with specified id
     .get(function(req, res){
         User.findById(req.params.user_id, function(err, user){
             if (err) res.send(err);
@@ -62,6 +118,7 @@ apiRouter.route('/users/:user_id')
         });
     })
 
+    // update user with specified id
     .put(function(req, res){
         User.findById(req.params.user_id, function(err, user){
             if (err) res.send(err);
@@ -77,6 +134,21 @@ apiRouter.route('/users/:user_id')
                 res.json({ message: 'User updated'});
             });
         });
+    })
+
+    // delete user with specified id
+    .delete(function(req, res){
+       User.remove({
+           _id: req.params.user_id
+
+       }, function(err, user){
+           if (err) return res.send(err);
+           res.json({ message: 'User successfully deleted'});
+       });
     });
+
+apiRouter.get('/me', function(req, res){
+    res.send(req.decoded);
+});
 
 module.exports = apiRouter;
