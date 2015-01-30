@@ -1,4 +1,4 @@
-angular.module('angModule1', ['angularRoutes'])
+angular.module('angModule1', ['angularRoutes', 'ngAnimate'])
 
 .controller('homeController', function(){
 
