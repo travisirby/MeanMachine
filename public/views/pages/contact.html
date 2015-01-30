@@ -1,0 +1,28 @@
+<div class="jumbotron">
+
+    <h2>{{ contact.title }}</h2>
+
+    <p>{{ contact.message }}</p>
+
+</div>
+
+<br/>
+
+<div class="form-group">
+
+    <label>New Message:</label>
+
+    <input type="text" class="form-control" ng-model="contact.formData.message">
+
+</div>
+
+<!-- form to add to exampleList -->
+<form class="form-inline" ng-submit="contact.submitContactInfo()">
+
+    <input type="text" class="form-control" placeholder="name" ng-model="contact.formData.name">
+
+    <input type="text" class="form-control" placeholder="email" ng-model="contact.formData.content">
+
+    <button type="submit" class="btn btn-success">Add</button>
+
+</form>

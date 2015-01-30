@@ -1,0 +1,28 @@
+<div class="jumbotron">
+
+    <h2>{{home.message}}</h2>
+
+    <li ng-repeat="exList in home.exampleList">{{ exList.name }} {{ exList.content }}</li>
+
+</div>
+
+<br/>
+
+<div class="form-group">
+
+    <label>New Message:</label>
+
+    <input type="text" class="form-control" ng-model="home.message">
+
+</div>
+
+<!-- form to add to exampleList -->
+<form class="form-inline" ng-submit="home.addToExampleList()">
+
+    <input type="text" class="form-control" placeholder="name" ng-model="home.formData.name">
+
+    <input type="text" class="form-control" placeholder="content" ng-model="home.formData.content">
+
+    <button type="submit" class="btn btn-success">Add</button>
+
+</form>
