@@ -1,6 +1,6 @@
-angular.module('angModule1', ['angularRoutes', 'ngAnimate'])
+angular.module('angModule1', ['angularRoutes', 'ngAnimate', 'usersService'])
 
-.controller('homeController', function(){
+.controller('homeController', function(Users){
 
         var vm = this;
 
@@ -20,6 +20,14 @@ angular.module('angModule1', ['angularRoutes', 'ngAnimate'])
             vm.formData = {};
 
         };
+
+        Users.all()
+
+            .success(function(data){
+
+                vm.users = data;
+
+            })
 
         vm.exampleList = [
             { name: 'list1', content: 'content1' },
