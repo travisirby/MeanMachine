@@ -24,8 +24,8 @@ app.use(function(req, res, next){
 app.use(morgan('dev'));
 
 // routing
-var mainRouter = require('./routes/mainRouter'),
-    apiRouter = require('./routes/apiRouter');
+var mainRouter = require('./app/routes/mainRouter'),
+    apiRouter = require('./app/routes/apiRouter');
 
 app.use('/api', apiRouter);
 app.use('/', mainRouter);
