@@ -2,7 +2,7 @@ var express = require('express'),
     apiRouter = express.Router(),
     jwt = require('jsonwebtoken'),
     jwtSecret = 'thisIsASecretForOurTokens',
-    User = require('././user');
+    User = require('./../models/user');
 
 
 // route for authenticating

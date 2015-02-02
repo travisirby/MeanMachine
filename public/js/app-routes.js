@@ -1,4 +1,4 @@
-angular.module('angularRoutes', ['ngRoute'])
+angular.module('appRoutes', ['ngRoute'])
 
 .config(function($routeProvider, $locationProvider) {
 
@@ -9,6 +9,14 @@ angular.module('angularRoutes', ['ngRoute'])
             templateUrl: 'views/pages/home.html',
             controller: 'homeController',
             controllerAs: 'home'
+
+        })
+
+        .when('/login', {
+
+            templateUrl: 'views/pages/login.html',
+            controller: 'authController',
+            controllerAs: 'login'
 
         })
 

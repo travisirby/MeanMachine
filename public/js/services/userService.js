@@ -39,6 +39,6 @@ angular.module('userService', [])
 
         }
 
-        return usersFactory;
+        return userFactory;
 
     });

@@ -3,11 +3,11 @@ var express = require('express'),
     mainRouter = express.Router();
 
 // serves all static files
-mainRouter.use(express.static(path.join(__dirname, '../public')));
+mainRouter.use(express.static(path.join(__dirname, '../../public')));
 
 // homepage
 mainRouter.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname, '../public/views/index.html'));
+    res.sendFile(path.join(__dirname, '../../public/views/index.html'));
 });
 
 // wildcard route, redirect to homepage if file does not exist

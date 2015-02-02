@@ -1,8 +1,31 @@
-angular.module('angModule1', ['angularRoutes', 'ngAnimate', 'userService'])
+angular.module('angModule1', ['appRoutes', 'ngAnimate', 'userService', 'authService', 'authController'])
 
-.controller('homeController', function(Users){
+// application configuration to integrate token into requests
+.config(function($httpProvider) {
+
+    // attach our auth interceptor to the http requests
+    $httpProvider.interceptors.push('AuthInterceptor');
+
+})
+
+.controller('homeController', function($rootScope, $location, Auth, User){
 
         var vm = this;
+
+        vm.loggedIn = Auth.isLoggedIn();
+
+        if (!vm.loggedIn) {
+            $location.path('/login');
+        }
+        else {
+            // get user info on page load
+            Auth.getUser()
+
+                .success(function(data) {
+                    vm.user = data;
+                });
+        }
+
 
         vm.message = "this is a message";
 
@@ -21,7 +44,7 @@ angular.module('angModule1', ['angularRoutes', 'ngAnimate', 'userService'])
 
         };
 
-        Users.all()
+        User.all()
 
             .success(function(data){
 
